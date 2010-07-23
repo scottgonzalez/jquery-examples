@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Autocomplete - Similar Results Example</title>
+
+	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/base/jquery-ui.css">
+	<style type="text/css">
+	body {
+		font-size: 62.5%;
+	}
+	.ui-autocomplete ul {
+		display: none;
+	}
+	.ui-autocomplete .ui-simcomplete-more {
+		float: right;
+		cursor: pointer;
+	}
+	</style>
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.js"></script>
+	<script>
+	$.widget( "custom.simcomplete", $.ui.autocomplete, {
+		_renderMenu: function( menuUl, items ) {
+			$.each( items, function( index, item ) {
+				var li = $( "<li></li>" )
+						.data( "item.autocomplete", item )
+						.appendTo( menuUl ),
+
+					label = $( "<a></a>" )
+						.text( item.label )
+						.appendTo( li ),
+
+					more = $( "<span></span>" )
+						.text( "more" )
+						.addClass( "ui-icon ui-icon-triangle-1-s ui-simcomplete-more" )
+						.click(function() {
+							ul.slideToggle();
+							return false;
+						})
+						.appendTo(label),
+
+					ul = $( "<ul></ul>" )
+						.appendTo(li);
+
+				$.each( item.similar, function( index, similar ) {
+					$( "<li></li>" )
+						.append( $( "<a></a>" ).text( similar ) )
+						.click(function( event ) {
+							menuUl.menu( "activate", event, li );
+							li.data( "item.autocomplete", {
+								label: similar,
+								value: similar
+							})
+						})
+						.appendTo( ul );
+				});
+			});
+		}
+	});
+	</script>
+	<script>
+	$(function() {
+		$( "#search" ).simcomplete({
+			source: [
+				{ label: "Kristin", similar: [ "Kristen", "Christine" ] },
+				{ label: "Laur", similar: [ "Laura", "Lauren" ] },
+				{ label: "Dylan", similar: [ "Dillon" ] },
+				{ label: "Mya", similar: [ "Maya", "Mia", "Maia" ] }
+			]
+		});
+	});
+	</script>
+</head>
+<body>
+
+<label for="search">Search: </label>
+<input id="search">
+
+</body>
+</html>
