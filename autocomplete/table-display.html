@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Autocomplete - Table Display Example</title>
+
+	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/jquery-ui-git.css">
+
+	<script src="http://code.jquery.com/jquery-1.6.2.js"></script>
+	<script src="http://code.jquery.com/ui/jquery-ui-git.js"></script>
+	<script src="http://jquery-ui.local/ui/jquery.ui.menu.js"></script>
+	<script src="http://jquery-ui.local/ui/jquery.ui.autocomplete.js"></script>
+	<script>
+	$.widget( "custom.tablecomplete", $.ui.autocomplete, {
+		_create: function() {
+			this._super( "_create" );
+			this.menu = $( "<table>" )
+				.addClass( "ui-autocomplete" )
+				.appendTo( "body" )
+				.hide()
+				.menu()
+				.data( "menu" );
+		},
+		_renderMenu: function( menu, items ) {
+			$.each( items, function() {
+				$( "<tr>" )
+					.data( "item.autocomplete", this )
+					.append( $( "<td>", { text: this.label } ) )
+					.append( $( "<td>", { text: this.state } ) )
+					.append( $( "<td>", { text: this.population } ) )
+					.appendTo( menu );
+			});
+		}
+	});
+	</script>
+	<script>
+	$(function() {
+		$( "#search" ).tablecomplete({
+			source: [
+				{ label: "New York", state: "NY", population: "8,175,133" },
+				{ label: "Los Angeles", state: "CA", population: "3,792,621" },
+				{ label: "Chicago", state: "IL", population: "2,695,598" },
+				{ label: "Houston", state: "TX", population: "2,099,451" },
+				{ label: "Philadelphia", state: "PA", population: "1,526,006" }
+			]
+		});
+	});
+	</script>
+</head>
+<body>
+
+<label for="search">Search: </label>
+<input id="search">
+<p>this example isn't intended to work right now, it's purely a reference for improving the menu widget.</p>
+</body>
+</html>
