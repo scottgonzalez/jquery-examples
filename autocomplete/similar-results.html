@@ -16,26 +16,30 @@
 	<script>
 	$.widget( "custom.simcomplete", $.ui.autocomplete, {
 		_create: function() {
-			var menu;
-			this.element.bind( "keydown.autocomplete", function( event ) {
+			this._bind({ "keydown": function( event ) {
 				switch ( event.keyCode ) {
 				case $.ui.keyCode.LEFT:
-					if ( menu.collapse( event ) ) {
+					if ( this.menu.collapse( event ) ) {
 						event.preventDefault();
 						event.stopImmediatePropagation();
 					}
 					break;
 				case $.ui.keyCode.RIGHT:
-					if ( menu.expand( event ) ) {
+					if ( this.menu.expand( event ) ) {
 						event.preventDefault();
 						event.stopImmediatePropagation();
 					}
 					break;
 				}
-			});
+			}});
 
 			this._super( "_create" );
-			menu = this.menu;
+		},
+
+		close: function() {
+			this._super( "close" );
+			// this should happen in the base autocomplete
+			this.menu.collapseAll();
 		},
 
 		_renderMenu: function( menuUl, items ) {
